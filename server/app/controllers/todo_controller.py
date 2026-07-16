@@ -1,17 +1,25 @@
-from app.database import db_connection
+import app.database as database
 
-def get_all_todo():
-    with db_connection.cursor() as cursor: 
-        query = "SELECT * FROM todos"
-        cursor.execute(query)
-        todos = cursor.fetchall()
-    
-    return todos
+async def get_all_todo():
+    async with database.pool.acquire() as conn:
+        async with conn.cursor() as cursor:
+            await cursor.execute(
+                "SELECT * FROM todos"
+            )
 
-def add_todo():
+            users = await cursor.fetchall()   
+
+    return users
+
+async def add_todo(todo):
+    async with database.pool.acquire() as conn:
+        async with conn.cursor() as cursor:
+           await cursor.execute(
+               "INSERT INTO todos (title) VALUES (%s)",(todo.title,)
+           )
     
     return {
-        "message": "This is add todo route"
+        "message": "Todo added succesfully"
     }
 
 def update_todo():
@@ -19,7 +27,8 @@ def update_todo():
         "message": "This is update todo route"
     }
 
-def delete_todo():
+def delete_todo(id):
+    print(id)
     return {
         "message": "This is delete todo route"
     }
