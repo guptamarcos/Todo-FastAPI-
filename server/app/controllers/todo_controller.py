@@ -1,5 +1,6 @@
 import app.database as database
 
+# THIS IS GET TODO CONTROLLER
 async def get_all_todo():
     async with database.pool.acquire() as conn:
         async with conn.cursor() as cursor:
@@ -11,6 +12,8 @@ async def get_all_todo():
 
     return users
 
+
+# THIS IS ADD TODO CONTROLLER
 async def add_todo(todo):
     async with database.pool.acquire() as conn:
         async with conn.cursor() as cursor:
@@ -22,13 +25,43 @@ async def add_todo(todo):
         "message": "Todo added succesfully"
     }
 
-def update_todo():
+
+# THIS IS UPDATE TODO CONTROLLER
+async def update_todo(id,todo):
+    update_data = todo.model_dump(exclude_unset=True)
+    print(update_data)
+    
+    if not update_data: 
+        return {"message": "Nothing to update"}
+    
+    fields = []
+    values = []
+
+    for key,val in update_data.items():
+        fields.append(f"{key}=%s")
+        values.append(val)
+
+    values.append(id)
+
+    query = f"UPDATE todos SET {', '.join(fields)} WHERE id=%s"
+    
+    async with database.pool.acquire() as conn:
+        async with conn.cursor() as cursor:
+            await cursor.execute( query, tuple(values))
+    
     return {
         "message": "This is update todo route"
     }
 
-def delete_todo(id):
-    print(id)
+
+# THIS IS DELETE TODO CONTROLLER
+async def delete_todo(id):
+    async with database.pool.acquire() as conn:
+        async with conn.cursor() as cursor: 
+            await cursor.execute(
+                "DELETE FROM todos WHERE id=%s", (id,)
+            )
+    
     return {
         "message": "This is delete todo route"
     }

@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 function Navbar() {
   return (
     <nav className="bg-blue-600 text-white shadow-md">
@@ -7,28 +9,28 @@ function Navbar() {
 
         {/* Navigation Links */}
         <ul className="flex items-center gap-8 text-lg">
-          <li>
+          {/* <li>
             <a href="/" className="hover:text-blue-200 transition duration-300">
               Home
             </a>
+          </li> */}
+
+          <li>
+            <Link
+              to="/todos/register"
+              className="hover:text-blue-200 transition duration-300"
+            >
+              Sign Up
+            </Link>
           </li>
 
           <li>
-            <a
-              href="/completed"
+            <Link
+              to="/todos/login"
               className="hover:text-blue-200 transition duration-300"
             >
-              Completed
-            </a>
-          </li>
-
-          <li>
-            <a
-              href="/pending"
-              className="hover:text-blue-200 transition duration-300"
-            >
-              Pending
-            </a>
+              Log In
+            </Link>
           </li>
         </ul>
       </div>

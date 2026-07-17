@@ -5,12 +5,8 @@ class TodoCreate(BaseModel):
     title: str
 
 class TodoUpdate(BaseModel):
-    id: int
-    title: str
-    completed: bool
-
-class TodoDelete(BaseModel):
-    id: int
+    title: str|None = None
+    completed: bool | None = None
 
 # Response Models
 class TodoResponse(BaseModel):

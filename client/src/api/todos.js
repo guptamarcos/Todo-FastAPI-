@@ -7,19 +7,20 @@ export const getTodo = async () => {
 
 export async function addTodo(data) {
   const response = await axiosInstance.post("/todos", { title: data });
-  console.log(response);
+
   return response?.data;
 }
 
-export async function updateTodo(props) {
-  console.log(props)
-  const response = await axiosInstance.put("/todos", {props});
-  console.log(response);
+export async function updateTodo({ id, todo, completed }) {
+  console.log(id, todo, completed);
+  const response = await axiosInstance.patch(`/todos/${id}`, {
+    title: todo,
+    completed,
+  });
   return response?.data;
 }
 
 export async function deleteTodo(id) {
-    const response = await axiosInstance.delete("/todos", { id })
-    console.log(response);
-    return response?.data;
+  const response = await axiosInstance.delete(`/todos/${id}`);
+  return response?.data;
 }

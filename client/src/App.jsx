@@ -1,11 +1,18 @@
-import Todos from "./component/Todos.jsx";
-import Navbar from "./component/Navbar.jsx";
+import Hero from "./component/Hero.jsx";
+import Signup from "./component/Signup.jsx";
+import Login from "./component/Login.jsx";
+
+import { Route, Routes, Navigate } from "react-router-dom";
 
 function App() {
   return (
     <>
-      <Navbar />
-      <Todos />
+      <Routes>
+        <Route path="/" element={<Navigate to="/todos" replace/>} />
+        <Route path="/todos" element={<Hero/>} />
+        <Route path="/todos/register" element={<Signup />} />
+        <Route path="/todos/login" element={<Login />} />
+      </Routes>
     </>
   );
 }
