@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.database import create_pool, close_pool
 from app.routes.todo_routes import router as todo_routes
+from app.routes.user_routes import router as user_routes
 
 
 @asynccontextmanager
@@ -29,3 +30,4 @@ app.add_middleware(
 )
 
 app.include_router(todo_routes,prefix="/api/todos")
+app.include_router(user_routes,prefix="/api/user")

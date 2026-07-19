@@ -8,9 +8,9 @@ async def get_all_todo():
                 "SELECT * FROM todos"
             )
 
-            users = await cursor.fetchall()   
+            todos = await cursor.fetchall()   
 
-    return users
+    return todos
 
 
 # THIS IS ADD TODO CONTROLLER

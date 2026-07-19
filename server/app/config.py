@@ -10,3 +10,6 @@ DB_CONFIG = {
     "password": os.getenv("DB_PASSWORD"),
     "database": os.getenv("DB_NAME"),
 }
+
+secret_key = os.getenv("SECRET_KEY")
+access_token_expire = os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES")
