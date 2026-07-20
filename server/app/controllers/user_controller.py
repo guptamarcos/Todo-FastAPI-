@@ -2,28 +2,7 @@ import app.database as database
 from asyncmy.errors import IntegrityError
 from fastapi import HTTPException 
 
-async def get_user(user_email):
-    async with database.pool.acquire() as conn:
-        async with conn.cursor() as cursor:
-            await cursor.execute(
-                "SELECT username, id, email FROM users WHERE email=%s",
-                (user_email,)
-            )
-
-            db_user = await cursor.fetchone()
             
-            if ((db_user is None)):
-                return None
-            
-            return {
-                "id": db_user[0],
-                "username": db_user[1],
-                "email": db_user[2]
-            }
-            
-            
-
-
 async def register_user(user):
     async with database.pool.acquire() as conn:
         async with conn.cursor() as cursor:

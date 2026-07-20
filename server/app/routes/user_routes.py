@@ -1,29 +1,15 @@
-from fastapi import APIRouter, Response, HTTPException, Cookie
+from fastapi import APIRouter, Response, HTTPException, Cookie, Depends
 from app.controllers import user_controller
 from app.schemas.user_schema import UserLogin,UserRegister
 from app.utils.generate_token import generate_access_token, decode_access_token
+from app.dependencies.auth import get_current_user
 
 router = APIRouter()
 
 
 @router.get("/me")
-async def get_user(access_token: str | None = Cookie(default = None)):
-    if(access_token is None):
-        raise HTTPException(
-            status_code = 401,
-            detail = "Token missing"
-        )
-    
-    payload = decode_access_token(access_token)
-    if (payload is None): 
-        raise HTTPException(
-            status_code = 401,
-            detail = "Invalid token",
-        )
-    
-    user_email = payload.get("sub")
-
-    return await user_controller.get_user(user_email)
+async def get_user(current_user = Depends(get_current_user)):
+    return current_user
     
     
 @router.post("/register")
@@ -61,7 +47,10 @@ async def login_user(user:UserLogin,response:Response):
 
 
 @router.post("/logout")
-async def logout_user(response:Response):
+async def logout_user(
+    response:Response, 
+    current_user = Depends(get_current_user)
+):
     response.delete_cookie(
         key="access_token"
     )
