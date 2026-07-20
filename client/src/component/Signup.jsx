@@ -1,6 +1,29 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { register,login } from "../api/userApi.js";
+import { useState,useContext } from "react";
+import { UserContext } from "../context/UserContext";
 
 function Signup() {
+  const { getUser } = useContext(UserContext);
+  const [user, setUser] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+  
+  const navigate = useNavigate();
+  async function handleSubmit(e) {
+    e.preventDefault();
+    try {
+      await register(user);
+      await login({"email":user.email,"password":user.password})
+      getUser();
+      navigate("/todos")
+    } catch (err) {
+      console.logI(err);
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
@@ -18,17 +41,13 @@ function Signup() {
         <div className="w-full max-w-md rounded-xl bg-white p-8 shadow-lg">
           {/* Heading */}
           <div className="mb-8 text-center">
-            <h1 className="text-3xl font-bold text-gray-800">
-              Create Account
-            </h1>
+            <h1 className="text-3xl font-bold text-gray-800">Create Account</h1>
 
-            <p className="mt-2 text-gray-500">
-              Sign up to continue
-            </p>
+            <p className="mt-2 text-gray-500">Sign up to continue</p>
           </div>
 
           {/* Signup Form */}
-          <form className="space-y-5">
+          <form className="space-y-5" onSubmit={(e) => handleSubmit(e)}>
             {/* Full Name */}
             <div>
               <label
@@ -41,6 +60,10 @@ function Signup() {
               <input
                 id="fullName"
                 type="text"
+                value={user?.name}
+                onChange={(e) =>
+                  setUser((prev) => ({ ...prev, name: e.target.value }))
+                }
                 placeholder="Enter your full name"
                 className="w-full rounded-md border border-gray-300 px-4 py-2 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
               />
@@ -58,6 +81,10 @@ function Signup() {
               <input
                 id="email"
                 type="email"
+                value={user?.email}
+                onChange={(e) =>
+                  setUser((prev) => ({ ...prev, email: e.target.value }))
+                }
                 placeholder="Enter your email"
                 className="w-full rounded-md border border-gray-300 px-4 py-2 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
               />
@@ -75,6 +102,10 @@ function Signup() {
               <input
                 id="password"
                 type="password"
+                value={user?.password}
+                onChange={(e) =>
+                  setUser((prev) => ({ ...prev, password: e.target.value }))
+                }
                 placeholder="Enter your password"
                 className="w-full rounded-md border border-gray-300 px-4 py-2 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
               />

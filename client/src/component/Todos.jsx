@@ -1,11 +1,13 @@
 import Todo from "./Todo.jsx";
-import { useEffect, useState } from "react";
-import { getTodo, addTodo, updateTodo } from "../api/todos.js";
+import { useEffect, useState, useContext } from "react";
+import { getTodo, addTodo, updateTodo } from "../api/todoApi.js";
+import { UserContext } from "../context/UserContext.jsx";
 
 function Todos() {
   const [todos, setTodos] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const { user } = useContext(UserContext);
 
   // Update Modal States
   const [showModal, setShowModal] = useState(false);
@@ -26,6 +28,11 @@ function Todos() {
   }
 
   async function add_todo() {
+    if(!user){
+      alert("Please signup or login for adding todo")
+      return;
+    }
+
     try {
       if (!input.trim()) return;
 

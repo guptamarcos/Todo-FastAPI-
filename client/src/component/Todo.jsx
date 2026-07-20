@@ -1,4 +1,4 @@
-import {updateTodo, deleteTodo } from "../api/todos.js";
+import { updateTodo, deleteTodo } from "../api/todoApi.js";
 
 function Todo({ props, get_todos, openUpdateModal }) {
   async function delete_todo(id) {
@@ -11,7 +11,6 @@ function Todo({ props, get_todos, openUpdateModal }) {
   }
 
   async function toggle_complete() {
-    console.log(props[2]);
     try {
       await updateTodo({ id: props[0], completed: !props[2] });
       get_todos();

@@ -1,6 +1,26 @@
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
+import { useState,useContext } from "react";
+import { login } from "../api/userApi.js";
+import { UserContext } from "../context/UserContext";
 
 function Login() {
+  const { getUser } = useContext(UserContext);
+  const [user, setUser] = useState({
+    email: "",
+    password: "",
+  });
+  
+  const navigate = useNavigate();
+  async function handleSubmit(evt) {
+    evt.preventDefault();
+    try {
+      await login(user);
+      getUser();
+      navigate("/todos")
+    } catch (err) {
+      console.log(err);
+    }
+  }
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
@@ -18,16 +38,12 @@ function Login() {
         <div className="w-full max-w-md rounded-xl bg-white p-8 shadow-lg">
           {/* Heading */}
           <div className="mb-8 text-center">
-            <h1 className="text-3xl font-bold text-gray-800">
-              Welcome Back
-            </h1>
-            <p className="mt-2 text-gray-500">
-              Sign in to continue.
-            </p>
+            <h1 className="text-3xl font-bold text-gray-800">Welcome Back</h1>
+            <p className="mt-2 text-gray-500">Sign in to continue.</p>
           </div>
 
           {/* Form */}
-          <form className="space-y-5">
+          <form className="space-y-5" onSubmit={(e)=> handleSubmit(e)}>
             <div>
               <label
                 htmlFor="email"
@@ -40,6 +56,8 @@ function Login() {
                 id="email"
                 type="email"
                 placeholder="Enter your email"
+                value={user?.email}
+                onChange={(e)=> setUser((prev)=> ({...prev,email: e.target.value}))}
                 className="w-full rounded-md border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none"
               />
             </div>
@@ -56,6 +74,8 @@ function Login() {
                 id="password"
                 type="password"
                 placeholder="Enter your password"
+                value={user?.password}
+                onChange={(e)=> setUser((prev)=> ({...prev,password: e.target.value}))}
                 className="w-full rounded-md border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none"
               />
             </div>

@@ -12,7 +12,6 @@ export async function addTodo(data) {
 }
 
 export async function updateTodo({ id, todo, completed }) {
-  console.log(id, todo, completed);
   const response = await axiosInstance.patch(`/todos/${id}`, {
     title: todo,
     completed,
